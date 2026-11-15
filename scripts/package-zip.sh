@@ -5,6 +5,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="${OUT_DIR:-$ROOT/out}"
 mkdir -p "$OUT_DIR"
+OUT_DIR="$(cd "$OUT_DIR" && pwd)"
 
 cd "$ROOT"
 pnpm install --frozen-lockfile 2>/dev/null || pnpm install
@@ -28,7 +29,10 @@ STAGING="$(mktemp -d)"
 PLUGIN_DIR="$STAGING/$SAFE_NAME"
 mkdir -p "$PLUGIN_DIR/dist"
 
-cp plugin.json package.json main.py LICENSE README.md LLM-DISCLAIMER.md THIRD_PARTY_NOTICES.md "$PLUGIN_DIR/"
+cp plugin.json package.json main.py LICENSE README.md THIRD_PARTY_NOTICES.md "$PLUGIN_DIR/"
+if [ -f LLM-DISCLAIMER.md ]; then
+  cp LLM-DISCLAIMER.md "$PLUGIN_DIR/"
+fi
 cp dist/index.js "$PLUGIN_DIR/dist/"
 if [ -d py_modules ]; then
   cp -r py_modules "$PLUGIN_DIR/"
