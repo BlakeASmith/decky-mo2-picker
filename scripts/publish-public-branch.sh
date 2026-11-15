@@ -55,7 +55,7 @@ push_public_github() {
   local url
   url="$(public_remote_push_url)"
   if ! git -C "$ROOT" push "$url" \
-    "${TARGET_BRANCH}:refs/heads/${PUBLIC_BRANCH}" --force-with-lease; then
+    "${TARGET_BRANCH}:refs/heads/${PUBLIC_BRANCH}" --force; then
     echo "Public GitHub push failed." >&2
     echo "  Prefer Origin Actions「Prepare public release branch」with PUBLIC_MIRROR_TOKEN set." >&2
     return 1
