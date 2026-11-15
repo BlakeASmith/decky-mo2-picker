@@ -42,6 +42,8 @@ jobs:
         run: pytest tests -q
 
       - name: Package plugin zip
+        env:
+          ZIP_BASENAME: ${{ github.ref == 'refs/heads/main' && 'mo2-universal-launcher-latest.zip' || '' }}
         run: |
           chmod +x scripts/package-zip.sh
           OUT_DIR=./out ./scripts/package-zip.sh
@@ -60,12 +62,14 @@ jobs:
           files: out/*.zip
           generate_release_notes: true
 
-      - name: Publish continuous prerelease (main)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Publish Latest rolling release (main)
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: continuous
-          name: Latest development build
-          prerelease: true
-          files: out/*.zip
-          make_latest: false
+          tag_name: latest
+          target_commitish: main
+          name: Latest
+          prerelease: false
+          files: out/mo2-universal-launcher-latest.zip
+          overwrite_files: true
+          make_latest: true

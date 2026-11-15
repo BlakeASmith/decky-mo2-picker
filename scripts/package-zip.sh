@@ -24,7 +24,11 @@ print(json.loads(Path("package.json").read_text()).get("version", "0.0.0"))
 PY
 )"
 SAFE_NAME="$(echo "$PLUGIN_NAME" | tr ' ' '-' | tr '[:upper:]' '[:lower:]')"
-ZIP_NAME="${SAFE_NAME}-v${VERSION}.zip"
+if [ -n "${ZIP_BASENAME:-}" ]; then
+  ZIP_NAME="$ZIP_BASENAME"
+else
+  ZIP_NAME="${SAFE_NAME}-v${VERSION}.zip"
+fi
 STAGING="$(mktemp -d)"
 PLUGIN_DIR="$STAGING/$SAFE_NAME"
 mkdir -p "$PLUGIN_DIR/dist"

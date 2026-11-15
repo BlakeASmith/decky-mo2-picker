@@ -4,15 +4,16 @@ Decky Loader plugin for SteamOS: discover Mod Organizer 2 instances (Steam, Hero
 
 ## Install
 
-1. Open **[Releases](https://github.com/BlakeASmith/decky-mo2-picker/releases)**.
-2. Download the latest **`mo2-universal-launcher-v*.zip`** (stable tags) or the **`continuous`** prerelease for bleeding-edge builds.
-3. In **Decky Loader → Settings**, use **Install plugin from URL** (paste the release asset URL) or install from the zip on your Deck.
+1. In **Decky Loader → Settings**, use **Install plugin from URL** and paste the **Latest** URL below (same link for every update), **or** download from **[Releases](https://github.com/BlakeASmith/decky-mo2-picker/releases)**.
+2. For pinned versions, use a **`v*`** tag release and its versioned zip.
 
-Example URL (replace version as needed):
+**Latest (rolling updates — fixed URL):**
 
 ```text
-https://github.com/BlakeASmith/decky-mo2-picker/releases/download/v0.1.0/mo2-universal-launcher-v0.1.0.zip
+https://github.com/BlakeASmith/decky-mo2-picker/releases/download/latest/mo2-universal-launcher-latest.zip
 ```
+
+Re-running install from that URL after each publish pulls the newest build. The zip still contains `plugin.json` `version` for tools that compare versions.
 
 Release assets on this **public** repository are anonymous downloads—no GitHub sign-in required in the browser or on Deck.
 
