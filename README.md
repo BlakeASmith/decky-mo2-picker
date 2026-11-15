@@ -13,12 +13,11 @@ Private **Origin** development tree. End users install from the **public** repo 
 
 ### Publish to GitHub (when ready)
 
-```bash
-PUSH=1 ./scripts/publish-public-branch.sh   # builds release/public from main
-git push origin release/public              # triggers sync → GitHub main + release zips
-```
+Origin: **Actions → Prepare public release branch → Run workflow**.
 
-Requires `gh auth login` (or SSH) on your machine for the GitHub push step. Public release CI uses the repo’s built-in `GITHUB_TOKEN`.
+One-time: add repo secret **`PUBLIC_MIRROR_TOKEN`** (fine-grained PAT, Contents write on `BlakeASmith/decky-mo2-picker`). Details: [docs/agents/PUBLIC_REPOSITORY.md](docs/agents/PUBLIC_REPOSITORY.md).
+
+Public **Build and Release** uses the repo’s built-in `GITHUB_TOKEN` for zips—no `gh` CLI on your machine.
 
 ## Develop locally
 
