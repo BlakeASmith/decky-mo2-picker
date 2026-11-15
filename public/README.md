@@ -36,6 +36,10 @@ pnpm run package:zip   # outputs out/*.zip
 
 GPL-3.0-or-later — see [LICENSE](LICENSE). Template scaffolding is credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
+## Contributing
+
+Pull requests welcome. Agents and automated tooling should read [AGENTS.md](AGENTS.md).
+
 ## Support
 
 Open an issue on this repository for bugs and feature requests related to the released plugin.

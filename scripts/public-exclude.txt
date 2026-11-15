@@ -2,7 +2,6 @@
 # One path per line; matched as prefix from repo root.
 
 docs/agents/
-AGENTS.md
 SPEC.md
 LLM-DISCLAIMER.md
 scripts/publish-public-branch.sh

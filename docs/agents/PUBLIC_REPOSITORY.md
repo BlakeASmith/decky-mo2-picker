@@ -1,57 +1,62 @@
-# Public GitHub repository (agents — internal only)
+# Public GitHub mirror (maintainers — internal only)
 
-This file lives on **private Origin `main` only**. It is **excluded** from the public mirror. Do not copy it to `release/public` or GitHub.
+Excluded from `release/public`. Cursor-specific automation notes live under **`.cursor/`** (also excluded).
 
 ## Repositories
 
-| Forge | Remote | Branch | Audience |
-|-------|--------|--------|----------|
-| **Origin (private)** | `origin` → `https://origin.cursor.com/…/decky-mo2-picker.git` | `main` | You, agents, internal work |
-| **Public mirror branch** | same Origin remote | `release/public` | Sanitized tree; triggers sync |
-| **GitHub (public)** | `public` → `https://github.com/BlakeASmith/decky-mo2-picker.git` | `main` | End users, releases, issues |
+| Forge | Branch | Audience |
+|-------|--------|----------|
+| **Origin (private)** | `main` | Primary development |
+| **Origin** | `release/public` | Sanitized snapshot; triggers GitHub sync |
+| **GitHub (public)** | `main` | Contributors, users, releases |
 
-Never push internal-only docs, agent prompts, or `SPEC.md` to `release/public` or GitHub `main`.
+Public tree includes generic **[AGENTS.md](../AGENTS.md)** at repo root (copied on publish from `main`).
 
-## What belongs on the public repo
+## What the public repo sees
 
-- Shipped plugin code (`main.py`, `py_modules/`, `src/`, `dist/` is build output only in CI)
-- User-facing `README` (from `public/README.md`)
-- `LICENSE`, `THIRD_PARTY_NOTICES.md`
-- Tests, CI **build/release** workflow only
-- `plugin.json`, `package.json`, assets needed to build
+- Plugin source, tests, `LICENSE`, `THIRD_PARTY_NOTICES.md`, **`AGENTS.md`**
+- User README from **`public/README.md`**
+- **`build-release.yml`** only (not internal CI or publish/sync workflows)
 
-## What stays private (`main` only)
+## Stays private on `main`
 
-- This file and everything under `docs/agents/`
-- `SPEC.md`, `LLM-DISCLAIMER.md`
-- Publish/sync workflow definitions and `scripts/publish-public-branch.sh`
-- Internal notes in the root `README.md` (Agent section)
+- This directory (`docs/agents/`), **`SPEC.md`**, **`LLM-DISCLAIMER.md`**
+- **`.cursor/`**, publish scripts, sync workflows
+- Internal **[README.md](../README.md)** maintainer section
 
-## Publishing (when a release is ready)
+## Publish private → public
 
-1. Merge or commit work on **`main`** (Origin).
-2. Run:
+```bash
+PUSH=1 ./scripts/publish-public-branch.sh
+git push origin release/public
+```
 
-   ```bash
-   ./scripts/publish-public-branch.sh
-   git push origin release/public
-   ```
+Requires Origin secret **`PUBLIC_GITHUB_PUSH_TOKEN`**. Sync workflow pushes `release/public` to **GitHub `main`**.
 
-3. CI on **`release/public`** force-syncs that commit to **GitHub `main`** (secret `PUBLIC_GITHUB_PUSH_TOKEN`).
-4. GitHub **Build and Release** workflow produces the installable zip and GitHub Releases.
+Never push Origin `main` directly to GitHub.
 
-Do **not** push `main` directly to the public GitHub remote.
+## When contributors land work on **public `main`**
 
-## One-time GitHub setup (human)
+Pull into private `main` before more internal work or the next publish:
 
-1. Create a fine-grained PAT or classic token with **contents: write** on `BlakeASmith/decky-mo2-picker` only.
-2. In **Origin** repo settings → Actions secrets: `PUBLIC_GITHUB_PUSH_TOKEN`.
-3. Confirm GitHub repo visibility is **Public**.
+```bash
+git remote add public https://github.com/BlakeASmith/decky-mo2-picker.git  # once
+git fetch public main
+git checkout main
+git merge public/main -m "chore: sync contributions from public main"
+# resolve conflicts; prefer contributor intent for user-facing files, re-apply public/README.md mapping if README conflict
+pnpm run build && pnpm test
+```
 
-## Agent rules
+Then continue on Origin `main` and publish when ready with `publish-public-branch.sh`.
 
-- Default all implementation work to **Origin `main`**.
-- Before marking a user-visible release done, run **`publish-public-branch.sh`** and push **`release/public`** (or ask the user to approve publish).
-- Use **`public/README.md`** for user-facing doc changes intended for GitHub; keep internal process in `docs/agents/` or root README “Maintainers” section.
-- Update release URLs to `https://github.com/BlakeASmith/decky-mo2-picker/...` only in public-facing files.
-- Do not add Cursor/Cloud Agent setup, Origin auth, or private infra to `public/` or files included in the manifest.
+**Reminder for Cursor / cloud agents:** after notifying the user of merged public PRs, or when the user mentions GitHub contributions, **fetch and merge `public/main`** into Origin `main` unless they explicitly want otherwise.
+
+## Doc split
+
+| Topic | Location |
+|-------|----------|
+| Generic agent/contributor rules | `AGENTS.md` (public) |
+| Mirror, publish, ingest public | This file |
+| Implementation spec | `SPEC.md` |
+| Cursor Cloud Agent branch/PR rules | `.cursor/rules/maintainers.mdc` |

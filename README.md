@@ -4,10 +4,12 @@ Private **Origin** development tree. End users install from the **public** repo 
 
 **https://github.com/BlakeASmith/decky-mo2-picker**
 
-## Maintainers & agents
+## Maintainers
 
-- Process and rules: [docs/agents/PUBLIC_REPOSITORY.md](docs/agents/PUBLIC_REPOSITORY.md)
-- Implementation spec (not public): [SPEC.md](SPEC.md)
+- Mirror, publish, ingesting public PRs: [docs/agents/PUBLIC_REPOSITORY.md](docs/agents/PUBLIC_REPOSITORY.md)
+- Cursor agents: [.cursor/rules/maintainers.mdc](.cursor/rules/maintainers.mdc)
+- Generic agent/contributor guide (public too): [AGENTS.md](AGENTS.md)
+- Implementation spec (private): [SPEC.md](SPEC.md)
 
 ### Publish to GitHub (when ready)
 
