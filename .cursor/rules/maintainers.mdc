@@ -6,7 +6,7 @@ alwaysApply: true
 Read **docs/agents/PUBLIC_REPOSITORY.md** before publishing or merging.
 
 - Develop on **Origin `main`**; do not push `main` to public GitHub.
-- Publish only via **`scripts/publish-public-branch.sh`** → branch **`release/public`**.
+- Publish via **`PUSH=1 ./scripts/publish-public-branch.sh`** (Origin + public GitHub via `gh`/SSH, not a PAT secret).
 - Keep **AGENTS.md** framework-agnostic; put Cursor-only notes here or under **docs/agents/**.
 - When **public GitHub `main`** has new commits (contributor PRs merged), **merge `public/main` into Origin `main`** before further internal work or publish.
 - User-facing README on GitHub comes from **public/README.md** at publish time, not the internal root README.

@@ -18,7 +18,7 @@ PUSH=1 ./scripts/publish-public-branch.sh   # builds release/public from main
 git push origin release/public              # triggers sync → GitHub main + release zips
 ```
 
-Or run the **Prepare public release branch** workflow on Origin (after setting `PUBLIC_GITHUB_PUSH_TOKEN`).
+Requires `gh auth login` (or SSH) on your machine for the GitHub push step. Public release CI uses the repo’s built-in `GITHUB_TOKEN`.
 
 ## Develop locally
 

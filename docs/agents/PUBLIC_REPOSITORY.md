@@ -26,12 +26,15 @@ Public tree includes generic **[AGENTS.md](../AGENTS.md)** at repo root (copied 
 
 ## Publish private → public
 
+**Public visibility** lets anyone **download** releases without signing in. **Pushing** still uses your normal GitHub auth (`gh auth login`, SSH, or git credential helper)—there is no separate “public repo push token.”
+
 ```bash
 PUSH=1 ./scripts/publish-public-branch.sh
-git push origin release/public
 ```
 
-Requires Origin secret **`PUBLIC_GITHUB_PUSH_TOKEN`**. Sync workflow pushes `release/public` to **GitHub `main`**.
+With `PUSH=1`, the script pushes **`release/public`** to Origin and **`release/public` → GitHub `main`** using your ambient GitHub credentials (`gh auth setup-git`).
+
+On **public GitHub**, the **Build and Release** workflow uses the repo’s built-in **`GITHUB_TOKEN`** to attach zips—no extra secret.
 
 Never push Origin `main` directly to GitHub.
 
