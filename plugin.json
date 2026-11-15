@@ -3,7 +3,7 @@
   "author": "BlakeASmith",
   "flags": ["root", "debug"],
   "api_version": 1,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publish": {
     "tags": ["modding", "mo2", "wine"],
     "description": "Discover MO2 instances across Steam, Heroic, Lutris, and portable installs. Launch MO2 or modded games from Gaming Mode.",
