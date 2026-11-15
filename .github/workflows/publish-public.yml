@@ -1,0 +1,29 @@
+name: Prepare public release branch
+
+# Internal only — excluded from release/public mirror. Run when you are ready to update GitHub.
+
+on:
+  workflow_dispatch:
+    inputs:
+      push_release_branch:
+        description: Push release/public to Origin after commit
+        type: boolean
+        default: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build and push release/public from main
+        env:
+          PUSH: ${{ inputs.push_release_branch == true && '1' || '0' }}
+        run: |
+          chmod +x scripts/publish-public-branch.sh
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          PUSH="$PUSH" REMOTE=origin ./scripts/publish-public-branch.sh

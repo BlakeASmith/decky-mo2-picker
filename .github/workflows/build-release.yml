@@ -1,11 +1,11 @@
 name: Build and Release
 
+# Runs on the public GitHub repository (main) after sync from Origin release/public.
+
 on:
   push:
     branches: [main]
     tags: ["v*"]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
