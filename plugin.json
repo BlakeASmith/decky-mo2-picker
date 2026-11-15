@@ -1,0 +1,12 @@
+{
+  "name": "MO2 Universal Launcher",
+  "author": "BlakeASmith",
+  "flags": ["root", "debug"],
+  "api_version": 1,
+  "version": "0.1.0",
+  "publish": {
+    "tags": ["modding", "mo2", "wine"],
+    "description": "Discover MO2 instances across Steam, Heroic, Lutris, and portable installs. Launch MO2 or modded games from Gaming Mode.",
+    "image": "https://opengraph.githubassets.com/1/BlakeASmith/decky-mo2-picker"
+  }
+}

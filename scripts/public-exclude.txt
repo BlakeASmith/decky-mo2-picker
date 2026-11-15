@@ -1,0 +1,10 @@
+# Paths excluded from the public GitHub mirror (release/public branch).
+# One path per line; matched as prefix from repo root.
+
+docs/agents/
+SPEC.md
+LLM-DISCLAIMER.md
+scripts/publish-public-branch.sh
+scripts/public-exclude.txt
+.github/workflows/publish-public.yml
+.cursor/

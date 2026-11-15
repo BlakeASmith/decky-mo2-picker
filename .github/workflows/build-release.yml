@@ -1,0 +1,71 @@
+name: Build and Release
+
+# Runs on the public GitHub repository (main) after sync from Origin release/public.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python test deps
+        run: pip install pytest
+
+      - name: Frontend build
+        run: pnpm install --frozen-lockfile && pnpm run build
+
+      - name: Unit tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}/py_modules
+        run: pytest tests -q
+
+      - name: Package plugin zip
+        run: |
+          chmod +x scripts/package-zip.sh
+          OUT_DIR=./out ./scripts/package-zip.sh
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: decky-mo2-launcher-zip
+          path: out/*.zip
+          if-no-files-found: error
+
+      - name: Publish GitHub Release (tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.zip
+          generate_release_notes: true
+
+      - name: Publish continuous prerelease (main)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: continuous
+          name: Latest development build
+          prerelease: true
+          files: out/*.zip
+          make_latest: false
