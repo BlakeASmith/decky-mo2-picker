@@ -28,7 +28,7 @@ STAGING="$(mktemp -d)"
 PLUGIN_DIR="$STAGING/$SAFE_NAME"
 mkdir -p "$PLUGIN_DIR/dist"
 
-cp plugin.json package.json main.py LICENSE README.md "$PLUGIN_DIR/"
+cp plugin.json package.json main.py LICENSE README.md LLM-DISCLAIMER.md THIRD_PARTY_NOTICES.md "$PLUGIN_DIR/"
 cp dist/index.js "$PLUGIN_DIR/dist/"
 if [ -d py_modules ]; then
   cp -r py_modules "$PLUGIN_DIR/"

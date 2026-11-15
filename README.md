@@ -28,3 +28,9 @@ pnpm run package:zip   # writes out/*.zip (no Docker required)
 CI runs on every push to `main` (artifact + `continuous` prerelease) and on version tags `v*` (GitHub Release with zip).
 
 See `SPEC.md` for the full technical specification.
+
+## License
+
+This project is licensed under the **GNU General Public License v3.0** (see [LICENSE](LICENSE)). Template scaffolding from [decky-plugin-template](https://github.com/SteamDeckHomebrew/decky-plugin-template) is acknowledged under BSD 3-Clause in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+AI-assisted development is described in [LLM-DISCLAIMER.md](LLM-DISCLAIMER.md).
