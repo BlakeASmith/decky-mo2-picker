@@ -7,4 +7,6 @@ LLM-DISCLAIMER.md
 scripts/publish-public-branch.sh
 scripts/public-exclude.txt
 .github/workflows/publish-public.yml
+.github/workflows/internal-ci.yml
+public/
 .cursor/

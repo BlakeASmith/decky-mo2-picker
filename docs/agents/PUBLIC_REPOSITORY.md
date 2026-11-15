@@ -7,7 +7,7 @@ Excluded from `release/public`. Cursor-specific automation notes live under **`.
 | Forge | Branch | Audience |
 |-------|--------|----------|
 | **Origin (private)** | `main` | Primary development |
-| **Origin** | `release/public` | Sanitized snapshot; triggers GitHub sync |
+| **Origin** | `release/public` | Sanitized snapshot |
 | **GitHub (public)** | `main` | Contributors, users, releases |
 
 Public tree includes generic **[AGENTS.md](../AGENTS.md)** at repo root (copied on publish from `main`).
@@ -16,7 +16,7 @@ Public tree includes generic **[AGENTS.md](../AGENTS.md)** at repo root (copied 
 
 - Plugin source, tests, `LICENSE`, `THIRD_PARTY_NOTICES.md`, **`AGENTS.md`**
 - User README from **`public/README.md`**
-- **`build-release.yml`** only (not internal CI or publish/sync workflows)
+- **`build-release.yml`** only (not internal CI or publish workflows)
 
 ## Stays private on `main`
 
@@ -24,19 +24,40 @@ Public tree includes generic **[AGENTS.md](../AGENTS.md)** at repo root (copied 
 - **`.cursor/`**, publish scripts, sync workflows
 - Internal **[README.md](../README.md)** maintainer section
 
-## Publish private → public
+## Publish private → public (no `gh` CLI)
 
-**Public visibility** lets anyone **download** releases without signing in. **Pushing** still uses your normal GitHub auth (`gh auth login`, SSH, or git credential helper)—there is no separate “public repo push token.”
+### One-time setup
 
-```bash
-PUSH=1 ./scripts/publish-public-branch.sh
-```
+1. **Fine-grained PAT** (your GitHub account):
+   - **Repository access:** `BlakeASmith/decky-mo2-picker` only
+   - **Permissions:** Contents **Read and write**, Metadata **Read**
+2. **Origin repo secret** (`blake-smith/decky-mo2-picker` on Origin):
+   - Name: **`PUBLIC_MIRROR_TOKEN`**
+   - Value: the PAT above
 
-With `PUSH=1`, the script pushes **`release/public`** to Origin and **`release/public` → GitHub `main`** using your ambient GitHub credentials (`gh auth setup-git`).
+### Each release
 
-On **public GitHub**, the **Build and Release** workflow uses the repo’s built-in **`GITHUB_TOKEN`** to attach zips—no extra secret.
+1. Merge work into **Origin `main`** (as usual).
+2. On Origin: **Actions → Prepare public release branch → Run workflow** (defaults are fine).
+
+The workflow:
+
+- Builds **`release/public`** from `main` (strips internal paths, copies `public/README.md` → `README.md`).
+- Pushes **`release/public`** to Origin.
+- Pushes **`release/public` → GitHub `main`** using `PUBLIC_MIRROR_TOKEN`.
+
+On **public GitHub**, **Build and Release** runs on `main` push and uploads the Decky zip to the **continuous** prerelease—using the repo’s built-in **`GITHUB_TOKEN`** (no extra secret on the public repo).
 
 Never push Origin `main` directly to GitHub.
+
+### Local / agent override
+
+Only if you cannot use the workflow:
+
+```bash
+./scripts/publish-public-branch.sh          # build release/public only
+PUBLIC_MIRROR_TOKEN='…' PUSH_PUBLIC_ONLY=1 ./scripts/publish-public-branch.sh
+```
 
 ## When contributors land work on **public `main`**
 
@@ -51,9 +72,9 @@ git merge public/main -m "chore: sync contributions from public main"
 pnpm run build && pnpm test
 ```
 
-Then continue on Origin `main` and publish when ready with `publish-public-branch.sh`.
+Then continue on Origin `main` and publish via the workflow when ready.
 
-**Reminder for Cursor / cloud agents:** after notifying the user of merged public PRs, or when the user mentions GitHub contributions, **fetch and merge `public/main`** into Origin `main` unless they explicitly want otherwise.
+**Reminder for Cursor / cloud agents:** after merged public PRs, **fetch and merge `public/main`** into Origin `main` unless the user says otherwise. **Do not** mirror to GitHub with MCP batch uploads—use the Origin workflow.
 
 ## Doc split
 
